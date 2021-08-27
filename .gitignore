@@ -1,0 +1,11 @@
+# Idea
+.idea
+.bsp
+*.class
+
+# Sbt
+target/
+
+# Project-specific
+orchestra.database.*
+*.csv
