@@ -19,7 +19,7 @@ object Core {
 
   def succeed[A](a: => A): OTask[A] = ZIO.succeed(a)
 
-  def gather(channel: Channel, from: Video, config: Config)
+  private def gather(channel: Channel, from: Video, config: Config)
             (using get: URL => Task[Json]): Task[Vector[Video]] = {
     Youtube.videos(
       channel = channel,
@@ -33,16 +33,6 @@ object Core {
       else gather(channel, videos.head, config).map(rest => videos ++ rest)
     }
   }
-
-  def track(videos: Vector[Vector[Video]]): Database => Database = database =>
-    videos.foldLeft(database) {
-      case (db, video +: _) =>
-        db.copy(markers = db.markers.updated(video.channel.id, video))
-      case (db, _) => db
-    }
-
-  def enqueue(playlistJob: Job): Database => Database = database =>
-    database.copy(jobs = database.jobs + playlistJob)
 
   def createPlaylist(job: Job, config: Config)
                     (using
@@ -102,6 +92,16 @@ object Core {
       }
     }
   }
+
+  private def track(videos: Vector[Vector[Video]]): Database => Database = database =>
+    videos.foldLeft(database) {
+      case (db, video +: _) =>
+        db.copy(markers = db.markers.updated(video.channel.id, video))
+      case (db, _) => db
+    }
+
+  private def enqueue(playlistJob: Job): Database => Database = database =>
+    database.copy(jobs = database.jobs + playlistJob)
 
   def process(using
               config: Task[Config],
