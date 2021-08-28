@@ -1,15 +1,17 @@
-import data.{Channel, Config, Database, Downloads, Job, Video}
+import data.{Channel, Config, Database, Downloads, Job, Source, Video}
 import http.util.{Http, URL}
 import http.Youtube
 import shell.Programs
 import shell.util.Command.{ShellCommand, Termination}
 import storage.LocalFile
-import java.io.File
 
+import java.io.File
 import scala.util.chaining._
 import misc.Extensions._
 import zio._
 import com.ravram.nemesis.Json
+import data.Source.Web
+import misc.Json.write
 
 object Core {
 
@@ -147,9 +149,9 @@ object Core {
                config: Task[Config],
                slurp: File => Task[Option[String]]): OTask[Json] = {
     for {
-      conf     <- config
-      channels <- LocalFile.read(conf.databaseFile)(_.channels)
-      json     <- Channel.writeManyWeb.writes.apply(channels.toVector).task
+      conf  <- config
+      db    <- LocalFile.load(conf.databaseFile)
+      json  <- write[Web, Set[Channel]].apply(db.channels).task
     } yield json
   }
 }
