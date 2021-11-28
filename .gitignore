@@ -7,5 +7,5 @@
 target/
 
 # Project-specific
-orchestra.database.*
+celine.database.*
 *.csv

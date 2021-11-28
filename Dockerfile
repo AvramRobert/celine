@@ -11,7 +11,7 @@ RUN chmod a+rx /usr/local/bin/youtube-dl
 
 USER ${uid}:${gid}
 
-COPY ./target/scala-3.0.0/orchestra-assembly-0.1.0.jar /orchestra.jar
+COPY ./target/scala-3.0.0/celine-assembly-0.1.0.jar /celine.jar
 
-CMD ["java", "-jar", "/orchestra.jar"]
+CMD ["java", "-jar", "/celine.jar"]
 

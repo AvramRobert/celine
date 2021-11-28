@@ -43,7 +43,7 @@ object Core {
     for {
       _          <- log("Preparing playlist directory")
       jobDate    <- Task(job.created.toLocalDate)
-      folder      = File(s"${config.outputDirectory.toPath.toAbsolutePath}/orchestra_${jobDate.toString}/")
+      folder      = File(s"${config.outputDirectory.toPath.toAbsolutePath}/celine_${jobDate.toString}/")
       _          <- Programs.createDir(folder)
       _          <- log("Downloading playlist files")
       successful <- Task.collectAllSuccessesPar {

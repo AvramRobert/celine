@@ -10,7 +10,7 @@ val configVersion = "1.4.1"
 lazy val root = project
   .in(file("."))
   .settings(
-    name := "orchestra",
+    name := "celine",
     version := "0.1.0",
 
     scalaVersion := scala3Version,
